@@ -184,7 +184,8 @@ class Sftp extends Subsystem
      * @param  string $local   The local filename
      * @param  string $distant The distant filename
      *
-     * @return boolean TRUE on success, or FALSE on failure
+     * @return integer|false The number of bytes that were sent,
+     *                       or FALSE on failure
      */
     public function send($local, $distant)
     {
@@ -287,8 +288,10 @@ class Sftp extends Subsystem
 
                 if ($recursive) {
                     $children    = $this->scanDirectory($filename, $recursive);
-                    $files       = array_merge($files, $children[0]);
-                    $directories = array_merge($directories, $children[1]);
+                    if (is_array($children)) {
+                        $files       = array_merge($files, $children[0]);
+                        $directories = array_merge($directories, $children[1]);
+                    }
                 }
             }
         }
